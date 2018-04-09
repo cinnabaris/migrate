@@ -1,0 +1,15 @@
+[package]
+name = "migrate"
+version = "0.1.0"
+authors = ["Jeremy Zheng <jitang.zheng@gmail.com>"]
+description = "Database migrations written in Rust."
+homepage = "https://github.com/cinnabaris/migrate"
+license = "MIT"
+
+[dependencies]
+log = "0.4"
+env_logger = "0.5"
+clap = "2.31"
+postgres = "0.15"
+mysql = "12.3"
+rusqlite = "0.13"
