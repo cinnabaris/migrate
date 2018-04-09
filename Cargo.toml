@@ -10,6 +10,10 @@ license = "MIT"
 log = "0.4"
 env_logger = "0.5"
 clap = "2.31"
-postgres = "0.15"
+chrono = "0.4"
 mysql = "12.3"
 rusqlite = "0.13"
+
+[dependencies.postgres]
+version = "0.15"
+features = ["with-chrono"]

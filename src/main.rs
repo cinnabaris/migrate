@@ -5,7 +5,7 @@ extern crate log;
 
 fn main() {
     env_logger::init();
-    if let Err(e) = migrate::run() {
+    if let Err(e) = migrate::app::run() {
         error!("{:?}", e);
     }
 }
