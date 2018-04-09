@@ -36,10 +36,7 @@ impl migration::Migration for Migration {
         let t = try!(self.db.transaction());
         try!(self.check(&t));
         try!(t.batch_execute(script));
-        try!(t.execute(
-            "INSERT INTO schema_migrations(version) VALUES($1)",
-            &[&name]
-        ));
+        try!(t.execute("INSERT INTO schema_migrations(version) VALUES($1)", &[name]));
         try!(t.commit());
         Ok(())
     }
@@ -47,7 +44,7 @@ impl migration::Migration for Migration {
         let t = try!(self.db.transaction());
         try!(self.check(&t));
         try!(t.batch_execute(script));
-        try!(t.execute("DELETE FROM schema_migrations WHERE version = $1", &[&name]));
+        try!(t.execute("DELETE FROM schema_migrations WHERE version = $1", &[name]));
         try!(t.commit());
         Ok(())
     }

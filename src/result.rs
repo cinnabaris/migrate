@@ -2,6 +2,7 @@ use std::{error, fmt, io, result, string};
 
 use clap;
 use postgres;
+use rusqlite;
 
 pub type Result<T> = result::Result<T, Error>;
 
@@ -11,6 +12,7 @@ pub enum Error {
     Io(io::Error),
     StringFromUtf8(string::FromUtf8Error),
     Clap(clap::Error),
+    Rusqlite(rusqlite::Error),
 }
 
 impl fmt::Display for Error {
@@ -20,6 +22,7 @@ impl fmt::Display for Error {
             Error::Io(ref err) => err.fmt(f),
             Error::StringFromUtf8(ref err) => err.fmt(f),
             Error::Clap(ref err) => err.fmt(f),
+            Error::Rusqlite(ref err) => err.fmt(f),
         }
     }
 }
@@ -31,6 +34,7 @@ impl error::Error for Error {
             Error::Io(ref err) => err.description(),
             Error::StringFromUtf8(ref err) => err.description(),
             Error::Clap(ref err) => err.description(),
+            Error::Rusqlite(ref err) => err.description(),
         }
     }
 
@@ -40,6 +44,7 @@ impl error::Error for Error {
             Error::Io(ref err) => Some(err),
             Error::StringFromUtf8(ref err) => Some(err),
             Error::Clap(ref err) => Some(err),
+            Error::Rusqlite(ref err) => Some(err),
         }
     }
 }
@@ -65,5 +70,11 @@ impl From<string::FromUtf8Error> for Error {
 impl From<clap::Error> for Error {
     fn from(err: clap::Error) -> Error {
         Error::Clap(err)
+    }
+}
+
+impl From<rusqlite::Error> for Error {
+    fn from(err: rusqlite::Error) -> Error {
+        Error::Rusqlite(err)
     }
 }
