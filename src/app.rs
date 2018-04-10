@@ -17,7 +17,7 @@ pub fn run() -> Result<()> {
     let migrate = clap::SubCommand::with_name("migrate")
         .about("Migrate the DB to the most recent version available");
     let rollback = clap::SubCommand::with_name("rollback").about("Roll back the version by 1");
-    let version = clap::SubCommand::with_name("version")
+    let versions = clap::SubCommand::with_name("versions")
         .about("Dump the migration status for the current DB");
 
     let matches = clap::App::new(env!("CARGO_PKG_NAME"))
@@ -41,7 +41,7 @@ pub fn run() -> Result<()> {
         .subcommand(create)
         .subcommand(migrate)
         .subcommand(rollback)
-        .subcommand(version)
+        .subcommand(versions)
         .get_matches();
 
     if let Some(matches) = matches.subcommand_matches("create") {
