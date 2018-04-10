@@ -51,10 +51,10 @@ impl migration::Migration for Migration {
     fn versions(&self) -> Result<Vec<(String, DateTime<Utc>)>> {
         try!(self.check(&self.db));
         let mut items = Vec::new();
-        for row in &self.db.query(
+        for row in &try!(self.db.query(
             "SELECT version, created_at FROM schema_migrations ORDER BY version ASC",
             &[],
-        )? {
+        )) {
             let version: String = row.get("version");
             let created_at: DateTime<Utc> = row.get("created_at");
             items.push((version, created_at))

@@ -31,6 +31,8 @@ pub fn run() -> Result<()> {
                 .help(
                     "Database connection url: \
             \n postgresql://user[:password]@host[:port][/database][?param1=val1[[&param2=val2]...]]
+            \n mysql://root:password@localhost:3307
+            \n sqlite.db
             ",
                 )
                 .required(true)

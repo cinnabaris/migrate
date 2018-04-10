@@ -3,6 +3,8 @@ extern crate log;
 
 extern crate chrono;
 extern crate clap;
+
+#[macro_use]
 extern crate mysql as _mysql;
 extern crate postgres;
 extern crate rusqlite;
@@ -12,6 +14,6 @@ pub mod result;
 pub mod migration;
 pub mod scheme;
 
-pub mod postgresql;
 pub mod mysql;
 pub mod sqlite;
+pub mod postgresql;
