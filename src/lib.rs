@@ -3,6 +3,7 @@ extern crate log;
 
 extern crate chrono;
 extern crate clap;
+extern crate url;
 
 #[macro_use]
 extern crate mysql as _mysql;

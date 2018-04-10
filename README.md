@@ -1,6 +1,6 @@
 # migrate
 
-Database migrations written in Rust. Postgres, MySQL, Sqlite supported.
+Database migrations tool written in Rust. PostgreSql, MySQL, Sqlite supported.
 
 ## Usage
 

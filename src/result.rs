@@ -4,6 +4,7 @@ use clap;
 use postgres;
 use rusqlite;
 use _mysql;
+use url;
 
 pub type Result<T> = result::Result<T, Error>;
 
@@ -16,6 +17,8 @@ pub enum Error {
     Rusqlite(rusqlite::Error),
     Mysql(_mysql::Error),
     MysqlFromRow(_mysql::FromRowError),
+    UrlParse(url::ParseError),
+    BadDriver(String),
 }
 
 impl fmt::Display for Error {
@@ -28,6 +31,8 @@ impl fmt::Display for Error {
             Error::Rusqlite(ref err) => err.fmt(f),
             Error::Mysql(ref err) => err.fmt(f),
             Error::MysqlFromRow(ref err) => err.fmt(f),
+            Error::UrlParse(ref err) => err.fmt(f),
+            Error::BadDriver(ref desc) => write!(f, "{}", desc),
         }
     }
 }
@@ -42,6 +47,8 @@ impl error::Error for Error {
             Error::Rusqlite(ref err) => err.description(),
             Error::Mysql(ref err) => err.description(),
             Error::MysqlFromRow(ref err) => err.description(),
+            Error::UrlParse(ref err) => err.description(),
+            Error::BadDriver(ref desc) => &desc[..],
         }
     }
 
@@ -54,6 +61,8 @@ impl error::Error for Error {
             Error::Rusqlite(ref err) => Some(err),
             Error::Mysql(ref err) => Some(err),
             Error::MysqlFromRow(ref err) => Some(err),
+            Error::UrlParse(ref err) => Some(err),
+            Error::BadDriver(ref _desc) => None,
         }
     }
 }
@@ -97,5 +106,11 @@ impl From<_mysql::Error> for Error {
 impl From<_mysql::FromRowError> for Error {
     fn from(err: _mysql::FromRowError) -> Error {
         Error::MysqlFromRow(err)
+    }
+}
+
+impl From<url::ParseError> for Error {
+    fn from(err: url::ParseError) -> Error {
+        Error::UrlParse(err)
     }
 }

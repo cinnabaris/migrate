@@ -4,11 +4,12 @@ use std::io::Read;
 use std::path::{Path, PathBuf};
 
 use postgres;
+use url::Url;
 use chrono::prelude::{DateTime, Utc};
 
 use super::migration::Migration;
-use super::result::Result;
-use super::postgresql;
+use super::result::{Error, Result};
+use super::{mysql, postgresql, sqlite};
 
 pub struct Scheme {
     mig: Box<Migration>,
@@ -111,6 +112,20 @@ impl Scheme {
 }
 
 pub fn parse(url: String) -> Result<Scheme> {
-    let db = try!(postgresql::Migration::new(url, postgres::TlsMode::None));
-    Ok(Scheme::new(Box::new(db)))
+    let uri = try!(Url::parse(&url));
+    match uri.scheme() {
+        "postgresql" => {
+            let db = try!(postgresql::Migration::new(url, postgres::TlsMode::None));
+            Ok(Scheme::new(Box::new(db)))
+        }
+        "mysql" => {
+            let db = try!(mysql::Migration::new(url));
+            Ok(Scheme::new(Box::new(db)))
+        }
+        "sqlite" => {
+            let db = try!(sqlite::Migration::new(Path::new(uri.path()).to_path_buf()));
+            Ok(Scheme::new(Box::new(db)))
+        }
+        _d => Err(Error::BadDriver(_d.to_string())),
+    }
 }
